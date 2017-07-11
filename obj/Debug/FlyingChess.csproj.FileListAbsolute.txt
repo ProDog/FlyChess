@@ -1,0 +1,5 @@
+E:\C#练习\FlyingChess\FlyingChess\bin\Debug\FlyingChess.exe
+E:\C#练习\FlyingChess\FlyingChess\bin\Debug\FlyingChess.pdb
+E:\C#练习\FlyingChess\FlyingChess\obj\Debug\FlyingChess.csprojResolveAssemblyReference.cache
+E:\C#练习\FlyingChess\FlyingChess\obj\Debug\FlyingChess.exe
+E:\C#练习\FlyingChess\FlyingChess\obj\Debug\FlyingChess.pdb
