@@ -60,6 +60,9 @@ namespace FlyingChess
             Console.ReadKey();
         }
 
+        /// <summary>
+        /// 显示地图
+        /// </summary>
         static void ShowUI()
         {
             Console.WriteLine("*************************************************");
@@ -69,6 +72,9 @@ namespace FlyingChess
             Console.WriteLine("*************************************************");
         }
 
+        /// <summary>
+        /// 初始化地图
+        /// </summary>
         static void InitialMap()
         {
             for (int i = 0; i < Maps.Length; i++)
@@ -104,91 +110,97 @@ namespace FlyingChess
             //}
         }
 
-        static void DrawMap()
+        /// <summary>
+        /// 坐标 pos 上应该绘制的图形
+        /// </summary>
+        /// <param name="pos"></param>
+        /// <returns></returns>
+        static string GetMapString(int pos)
         {
-            # region 1行
-            for (int i = 0; i <= 29; i++)
+            string result = "";
+            if (PlayerPos[0] == pos && PlayerPos[1] == pos)
             {
-                if (PlayerPos[0] == i && PlayerPos[1] == i)
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                result = "<>";
+            }
+            else if (PlayerPos[0] == pos)
+            {
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                result = "A";
+            }
+            else if (PlayerPos[1] == pos)
+            {
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                result = "B";
+            }
+            else
+            {
+                switch (Maps[pos])
                 {
-                    Console.Write("<>");
-                }
-                else if (PlayerPos[0] == i)
-                {
-                    Console.Write("A");
-                }
-                else if (PlayerPos[1] == i)
-                {
-                    Console.Write("B");
-                }
-                else
-                {
-                    switch (Maps[i])
-                    {
-                        case 0:
-                            Console.Write("○");
-                            break;
-                        case 1:
-                            Console.Write("●");
-                            break;
-                        case 2:
-                            Console.Write("■");
-                            break;
-                        case 3:
-                            Console.Write("□");
-                            break;
-                        case 4:
-                            Console.Write("▼");
-                            break;
-                    }
+                    case 0:
+                        Console.ForegroundColor = ConsoleColor.White;
+                        result = "○";
+                        break;
+                    case 1:
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        result = "●";
+                        break;
+                    case 2:
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        result = "■";
+                        break;
+                    case 3:
+                        Console.ForegroundColor = ConsoleColor.Blue;
+                        result = "□";
+                        break;
+                    case 4:
+                        Console.ForegroundColor = ConsoleColor.DarkCyan;
+                        result = "▼";
+                        break;
                 }
             }
-            # endregion
+            return result;
+        }
 
+        /// <summary>
+        /// 绘制地图图案
+        /// </summary>
+        static void DrawMap()
+        {
+            Console.WriteLine("地图说明：普通：○,幸运轮盘：●,地雷：■,暂停：□,时空隧道：▼\n");
+
+            for (int i = 0; i <= 30; i++)
+            {
+               Console.Write(GetMapString(i));
+            }
             Console.WriteLine();
 
-            #region 1列
             for (int i = 30; i <= 34; i++)
             {
                 for (int j = 0; j < 29; j++)
                 {
                     Console.Write("  ");
                 }
-                if (PlayerPos[0] == i && PlayerPos[1] == i)
-                {
-                    Console.WriteLine("<>");
-                }
-                else if (PlayerPos[0] == i)
-                {
-                    Console.WriteLine("A");
-                }
-                else if (PlayerPos[1] == i)
-                {
-                    Console.WriteLine("B");
-                }
-                else
-                {
-                    switch (Maps[i])
-                    {
-                        case 0:
-                            Console.WriteLine("○");
-                            break;
-                        case 1:
-                            Console.WriteLine("●");
-                            break;
-                        case 2:
-                            Console.WriteLine("■");
-                            break;
-                        case 3:
-                            Console.WriteLine("□");
-                            break;
-                        case 4:
-                            Console.WriteLine("▼");
-                            break;
-                    }
-                }
+                Console.WriteLine(GetMapString(i));
             }
-            #endregion
+
+            for (int i = 64; i >= 35; i--)
+            {
+                Console.Write(GetMapString(i));
+            }
+            Console.WriteLine();
+
+            for (int i = 65; i <= 69; i++)
+            {
+                Console.WriteLine(GetMapString(i));
+            }
+
+            for (int i = 70; i <= 99; i++)
+            {
+                Console.Write(GetMapString(i));
+            }
+            Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.White;
         }
     }
 }
