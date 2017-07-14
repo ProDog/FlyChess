@@ -19,6 +19,9 @@ namespace FlyingChess
             //        4：时空隧道 ▼
             //Console.WriteLine("○ ● ■ □ ▼");
 
+            Random ran = new Random(); //掷骰子产生随机数
+            int step = 0;
+
             # region 初始游戏
             string[] Names = new string[2];
             ShowUI();
@@ -48,14 +51,36 @@ namespace FlyingChess
             Console.Clear();
 
             ShowUI();
-            Console.WriteLine("对战开始······\n");
-            Console.WriteLine("玩家 {0} 的士兵用 A 表示；\n\n玩家 {1} 的士兵用 B 表示；\n", Names[0], Names[1]);
-            Console.WriteLine("如果玩家 {0} 和玩家 {1} 在同一位置，用 <> 表示...", Names[0], Names[1]);
-            Console.WriteLine("");
+            Console.WriteLine("\n对战开始······");
+            Console.WriteLine("\n玩家 {0} 的士兵用 A 表示；\n\n玩家 {1} 的士兵用 B 表示；", Names[0], Names[1]);
+            Console.WriteLine("\n如果玩家 {0} 和玩家 {1} 在同一位置，用 <> 表示...", Names[0], Names[1]);
+            Console.WriteLine("\n按任意键开始游戏......");
+            Console.ReadKey();
+            Console.Clear();
             # endregion
 
             InitialMap();
             DrawMap();
+
+            //让玩家 A B循环掷骰子，当坐标大于 99 时结束
+            while (PlayerPos[0] < 99 && PlayerPos[1] < 99)
+            {
+                //玩家 A 掷骰子
+                Console.WriteLine("\n玩家 {0} 按任意键开始掷骰子...",Names[0]);
+                Console.ReadKey(true);
+                step = ran.Next(1, 7);
+                Console.WriteLine("\n玩家 {0} 掷出了: {1}.", Names[0], step);
+                Console.WriteLine("\n玩家 {0} 按任意键开始移动...", Names[0]);
+                Console.ReadKey(true);
+                PlayerPos[0] = PlayerPos[0] + step;
+                if (PlayerPos[0] > 99)
+                {
+                    PlayerPos[0] = 99;
+                }
+                Console.Clear();
+                DrawMap();
+
+            }
 
             Console.ReadKey();
         }
@@ -167,9 +192,9 @@ namespace FlyingChess
         /// </summary>
         static void DrawMap()
         {
-            Console.WriteLine("地图说明：普通：○,幸运轮盘：●,地雷：■,暂停：□,时空隧道：▼\n");
+            Console.WriteLine("\n地图说明：普通：○,幸运轮盘：●,地雷：■,暂停：□,时空隧道：▼\n");
 
-            for (int i = 0; i <= 30; i++)
+            for (int i = 0; i <= 29; i++)
             {
                Console.Write(GetMapString(i));
             }
