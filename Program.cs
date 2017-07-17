@@ -21,6 +21,7 @@ namespace FlyingChess
 
             Random ran = new Random(); //掷骰子产生随机数
             int step = 0;
+            string input;
 
             # region 初始游戏
             string[] Names = new string[2];
@@ -73,16 +74,76 @@ namespace FlyingChess
                 Console.WriteLine("\n玩家 {0} 按任意键开始移动...", Names[0]);
                 Console.ReadKey(true);
                 PlayerPos[0] = PlayerPos[0] + step;
-                if (PlayerPos[0] > 99)
+                CheckePos();
+                if (PlayerPos[0] == PlayerPos[1]) //玩家 A 踩到玩家 B
                 {
-                    PlayerPos[0] = 99;
+                    PlayerPos[1] = 0;
                 }
+                else
+                {
+                    switch (Maps[PlayerPos[0]]) //判断玩家所在位置是否有其他关卡
+                    {
+                        case 0:
+                            break;
+                        case 1://幸运轮盘
+                            Console.Clear();
+                            DrawMap();
+                            Console.WriteLine("恭喜你选到了幸运轮盘，请选择运气：");
+                            Console.WriteLine("\n1:交换位置，2：轰炸对方");
+                            int userInput = ReadNumber(1, 2);
+                            if (userInput == 1)
+                            {
+                                int temp = PlayerPos[0];
+                                PlayerPos[0] = PlayerPos[1];
+                                PlayerPos[1] = temp;
+                            }
+                            else
+                            {
+                                PlayerPos[1] = PlayerPos[1] - 6;
+                                CheckePos();
+                            }
+                            break;
+                        case 2://踩到地雷
+                            PlayerPos[0] = PlayerPos[0] - 6;
+                            CheckePos();
+                            break;
+                        case 3://暂停一次
+                            break;
+                        case 4:
+                            PlayerPos[0] = PlayerPos[0] + 10;
+                            break;
+                    }
+                }
+                //Console.WriteLine("按任意键开始行动......");
+                //Console.ReadKey(true);
+                Console.Clear();
+                DrawMap();
+                Console.WriteLine("\n玩家 {0} 掷出了 {1} 的行动完成.", Names[0], step);
+                Console.WriteLine("\n最新位置：\n\n玩家 {0} 的位置是 {1}", Names[0], PlayerPos[0] + 1);
+                Console.WriteLine("\n玩家 {0} 的位置是 {1}", Names[1], PlayerPos[1] + 1);
+                Console.WriteLine("\n按任意键继续...");
+                Console.ReadKey();
                 Console.Clear();
                 DrawMap();
 
             }
 
             Console.ReadKey();
+        }
+
+        /// <summary>
+        /// 检查是否越界
+        /// </summary>
+        private static void CheckePos()
+        {
+            if (PlayerPos[0] > 99)
+            {
+                PlayerPos[0] = 99;
+            }
+            if (PlayerPos[0] < 0)
+            {
+                PlayerPos[0] = 0;
+            }
         }
 
         /// <summary>
@@ -192,6 +253,7 @@ namespace FlyingChess
         /// </summary>
         static void DrawMap()
         {
+            Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine("\n地图说明：普通：○,幸运轮盘：●,地雷：■,暂停：□,时空隧道：▼\n");
 
             for (int i = 0; i <= 29; i++)
@@ -226,6 +288,39 @@ namespace FlyingChess
             }
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.White;
+        }
+
+        static int ReadNumber()
+        {
+            int i = ReadNumber(int.MinValue, int.MaxValue);
+            return i;
+        }
+
+        /// <summary>
+        /// 读取用户输入，限定在某一范围
+        /// </summary>
+        /// <param name="min"></param>
+        /// <param name="max"></param>
+        /// <returns></returns>
+        static int ReadNumber(int min, int max)
+        {
+            while (true)
+            {
+                try
+                {
+                    int number = Convert.ToInt32(Console.ReadLine());
+                    if (number < min || number > max)
+                    {
+                        Console.WriteLine("只能输入{0}-{1}之间的整数，请重新输入！", min, max);
+                        continue;
+                    }
+                    return number;
+                }
+                catch
+                {
+                    Console.WriteLine("只能输入数字，请重新输入！");
+                }
+            }
         }
     }
 }
