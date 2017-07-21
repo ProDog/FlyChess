@@ -74,6 +74,8 @@ namespace FlyingChess
 
                 if (PlayerPos[0] >= 99)
                 {
+                    Console.WriteLine("玩家 {0} 获胜，请按任意键退出游戏！", Names[0]);
+                    Console.ReadKey(true);
                     break;
                 }
 
@@ -87,6 +89,8 @@ namespace FlyingChess
                 }
                 if (PlayerPos[1] >= 99)
                 {
+                    Console.WriteLine("玩家 {0} 获胜，请按任意键退出游戏！", Names[1]);
+                    Console.ReadKey(true);
                     break;
                 }
             }
@@ -99,7 +103,7 @@ namespace FlyingChess
             string msg = "";
             Random ran = new Random(); //掷骰子产生随机数
 
-            Console.WriteLine("\n玩家 {0} 按任意键开始掷骰子...", Names[0]);
+            Console.WriteLine("\n玩家 {0} 按任意键开始掷骰子...", Names[playerNumber]);
             ConsoleKeyInfo rek = Console.ReadKey(true);
             //Console.ReadKey(true);
             step = ran.Next(1, 7);
@@ -116,17 +120,17 @@ namespace FlyingChess
             Console.WriteLine("\n玩家 {0} 按任意键开始移动...", Names[playerNumber]);
             Console.ReadKey(true);
 
-            PlayerPos[0] = PlayerPos[0] + step;
+            PlayerPos[playerNumber] = PlayerPos[playerNumber] + step;
             CheckePos();
             if (PlayerPos[0] == PlayerPos[1]) //玩家 A 踩到玩家 B
             {
-                PlayerPos[1] = 0;
-                msg = string.Format("玩家 {0} 踩到了玩家 {1}，{1} 退回原点", Names[0], Names[1]);
+                PlayerPos[1-playerNumber] = 0;
+                msg = string.Format("玩家 {0} 踩到了玩家 {1}，{1} 退回原点", Names[playerNumber], Names[1-playerNumber]);
 
             }
             else
             {
-                switch (Maps[PlayerPos[0]]) //判断玩家所在位置是否有其他关卡
+                switch (Maps[PlayerPos[playerNumber]]) //判断玩家所在位置是否有其他关卡
                 {
                     case 0:
                         msg = "";
@@ -134,7 +138,7 @@ namespace FlyingChess
                     case 1://幸运轮盘
                         Console.Clear();
                         DrawMap();
-                        Console.WriteLine("恭喜你选到了幸运轮盘，请选择运气：");
+                        Console.WriteLine("恭喜玩家 {0} 选到了幸运轮盘，请选择运气：",Names[playerNumber]);
                         Console.WriteLine("\n1:交换位置，2：轰炸对方");
                         int userInput = ReadNumber(1, 2);
                         if (userInput == 1)
@@ -142,26 +146,26 @@ namespace FlyingChess
                             int temp = PlayerPos[0];
                             PlayerPos[0] = PlayerPos[1];
                             PlayerPos[1] = temp;
-                            msg = string.Format("玩家 {0} 选择与对方交换位置！", Names[0]);
+                            msg = string.Format("玩家 {0} 选择与对方交换位置！", Names[playerNumber]);
                         }
                         else
                         {
-                            PlayerPos[1] = PlayerPos[1] - 6;
+                            PlayerPos[1-playerNumber] = PlayerPos[1-playerNumber] - 6;
                             CheckePos();
-                            msg = string.Format("玩家 {0} 选择轰炸对方！对方退 6 步", Names[0]);
+                            msg = string.Format("玩家 {0} 选择轰炸对方！对方退 6 步", Names[playerNumber]);
                         }
                         break;
                     case 2://踩到地雷
-                        PlayerPos[0] = PlayerPos[0] - 6;
+                        PlayerPos[playerNumber] = PlayerPos[playerNumber] - 6;
                         CheckePos();
-                        msg = string.Format("玩家 {0} 踩到了地雷，退 6 步！", Names[0]);
+                        msg = string.Format("玩家 {0} 踩到了地雷，退 6 步！", Names[playerNumber]);
                         break;
                     case 3://暂停一次
-                        msg = string.Format("玩家 {0} 暂停一次！", Names[0]);
+                        msg = string.Format("玩家 {0} 暂停一次！", Names[playerNumber]);
                         break;
                     case 4:
-                        PlayerPos[0] = PlayerPos[0] + 10;
-                        msg = string.Format("玩家 {0} 进入时空隧道，前进 10 步！", Names[0]);
+                        PlayerPos[playerNumber] = PlayerPos[playerNumber] + 10;
+                        msg = string.Format("玩家 {0} 进入时空隧道，前进 10 步！", Names[playerNumber]);
                         break;
                 }
             }
@@ -173,7 +177,7 @@ namespace FlyingChess
             {
                 Console.WriteLine(msg);
             }
-            Console.WriteLine("\n玩家 {0} 行动完成.", Names[0], step);
+            Console.WriteLine("\n玩家 {0} 行动完成.", Names[playerNumber], step);
             Console.WriteLine("\n最新位置：\n\n玩家 {0} 的位置是 {1}", Names[0], PlayerPos[0] + 1);
             Console.WriteLine("\n玩家 {0} 的位置是 {1}", Names[1], PlayerPos[1] + 1);
             Console.WriteLine("\n按任意键继续...");
